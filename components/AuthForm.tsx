@@ -4,11 +4,11 @@ import { z } from "zod";
 import Link from "next/link";
 import Image from "next/image";
 import { toast } from "sonner";
-import { auth } from "@/firebase/client";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { auth } from "@/firebase/client";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -18,13 +18,13 @@ import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 
 import { signIn, signUp } from "@/lib/actions/auth.action";
-import FormField from "./FormField";
+import FormField from "@/components/FormField";
 
 const authFormSchema = (type: FormType) => {
   return z.object({
-    name: type === "sign-up" ? z.string().min(3) : z.string().optional(),
+    name: type === "sign-up" ? z.string().min(4) : z.string().optional(),
     email: z.string().email(),
-    password: z.string().min(3),
+    password: z.string().min(6),
   });
 };
 
@@ -41,10 +41,10 @@ const AuthForm = ({ type }: { type: FormType }) => {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       if (type === "sign-up") {
-        const { name, email, password } = data;
+        const { name, email, password } = values;
 
         const userCredential = await createUserWithEmailAndPassword(
           auth,
@@ -59,15 +59,15 @@ const AuthForm = ({ type }: { type: FormType }) => {
           password,
         });
 
-        if (!result.success) {
-          toast.error(result.message);
+        if (!result?.success) {
+          toast.error(result?.message || "Failed to create account");
           return;
         }
 
         toast.success("Account created successfully. Please sign in.");
         router.push("/sign-in");
       } else {
-        const { email, password } = data;
+        const { email, password } = values;
 
         const userCredential = await signInWithEmailAndPassword(
           auth,
@@ -76,6 +76,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
         );
 
         const idToken = await userCredential.user.getIdToken();
+
         if (!idToken) {
           toast.error("Sign in Failed. Please try again.");
           return;
