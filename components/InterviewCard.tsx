@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import DisplayTechIcons from './DisplayTechIcons'
 
-const InterviewCard = ({ interviewId, userid, role, type, techstack, createdAt }: InterviewCardProps) => {
+const InterviewCard = ({ id, userid, role, type, techstack, createdAt }: InterviewCardProps) => {
 
   const feedback = null as Feedback | null
   const normalizedType = /mix/gi.test(type) ? 'Mixed' : type
@@ -59,8 +59,8 @@ const InterviewCard = ({ interviewId, userid, role, type, techstack, createdAt }
 
           <Button className='btn-primary'>
             <Link href={feedback
-              ? `/interview/${interviewId}/feedback`
-              : `/interview/${interviewId}`
+              ? `/interview/${id}/feedback`
+              : `/interview/${id}`
             }>
               {feedback ? 'Check Feedback' : 'Take Interview'}
             </Link>
