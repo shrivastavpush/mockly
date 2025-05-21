@@ -136,7 +136,7 @@ export const interviewer: CreateAssistantDTO = {
         Use official yet friendly language.
         Keep responses concise and to the point (like in a real voice interview).
         Avoid robotic phrasing—sound natural and conversational.
-        Answer the candidate’s questions professionally:
+        Answer the candidate's questions professionally:
 
         If asked about the role, company, or expectations, provide a clear and relevant answer.
         If unsure, redirect the candidate to HR for more details.
@@ -153,6 +153,8 @@ export const interviewer: CreateAssistantDTO = {
       },
     ],
   },
+  clientMessages: [],
+  serverMessages: []
 };
 
 export const feedbackSchema = z.object({
