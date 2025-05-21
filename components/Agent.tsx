@@ -1,6 +1,6 @@
 'use client'
 
-import { generator, interviewer } from '@/constants'
+import { interviewer } from '@/constants'
 import { createFeedback } from '@/lib/actions/general.action'
 import { cn } from '@/lib/utils'
 import { vapi } from '@/lib/vapi.sdk'
@@ -74,25 +74,25 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
   const handleGenerateFeedback = async (messages: SavedMessage[]) => {
     console.log('generate feedback')
 
-    // const { success, feedbackId: id } = await createFeedback({
-    //   interviewId: interviewId!,
-    //   userId: userId!,
-    //   transcript: messages,
-    // })
+    const { success, feedbackId: id } = await createFeedback({
+      interviewId: interviewId!,
+      userId: userId!,
+      transcript: messages,
+    })
 
-    // if (success && id) {
-    //   router.push(`/interview/${interviewId}/feedback/${id}`)
-    // } else {
-    //   console.error('Failed to save feedback')
-    //   router.push(`/`)
-    // }
+    if (success && id) {
+      router.push(`/interview/${interviewId}/feedback/${id}`)
+    } else {
+      console.error('Failed to save feedback')
+      router.push(`/`)
+    }
   }
 
   const handleCall = async () => {
     setCallStatus(CallStatus.CONNECTING)
 
     if (type === 'generate') {
-      await vapi.start(generator, {
+      await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!, {
         variableValues: {
           userid: userId,
           username: userName,
