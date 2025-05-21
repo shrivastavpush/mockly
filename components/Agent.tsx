@@ -1,6 +1,6 @@
 'use client'
 
-import { interviewer } from '@/constants'
+import { generator, interviewer } from '@/constants'
 import { createFeedback } from '@/lib/actions/general.action'
 import { cn } from '@/lib/utils'
 import { vapi } from '@/lib/vapi.sdk'
@@ -92,7 +92,7 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
     setCallStatus(CallStatus.CONNECTING)
 
     if (type === 'generate') {
-      await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!, {
+      await vapi.start(generator, {
         variableValues: {
           userid: userId,
           username: userName,

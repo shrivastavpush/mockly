@@ -228,3 +228,202 @@ export const dummyInterviews: Interview[] = [
     createdAt: "2024-03-14T15:30:00Z",
   },
 ];
+
+export const generator = {
+  "name": "Mockly",
+  "nodes": [
+    {
+      "name": "start",
+      "type": "conversation",
+      "isStart": true,
+      "metadata": {
+        "position": {
+          "x": 766.265817035993,
+          "y": -573.5763476703155
+        }
+      },
+      "prompt": "Greet the user and help them create a new AI Interviewer.",
+      "voice": {
+        "model": "aura-2",
+        "voiceId": "thalia",
+        "provider": "deepgram"
+      },
+      "variableExtractionPlan": {
+        "output": [
+          {
+            "title": "type",
+            "description": "What type of the interview should it be?",
+            "type": "string",
+            "enum": [
+              "Technical ",
+              "Behavioral ",
+              "Mixed"
+            ]
+          },
+          {
+            "title": "role",
+            "description": "What role should would you like to train for?",
+            "type": "string",
+            "enum": []
+          },
+          {
+            "title": "techstack",
+            "description": "A list of technologies to cover during the job interview. ",
+            "type": "string",
+            "enum": []
+          },
+          {
+            "title": "amount",
+            "description": "How many questions would you like to generate?",
+            "type": "string",
+            "enum": [
+              "5",
+              "10",
+              "15",
+              "20"
+            ]
+          },
+          {
+            "title": "level",
+            "description": "The job experience level.",
+            "type": "string",
+            "enum": [
+              "Entry",
+              "Junior",
+              "Mid",
+              "Senior"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "conversation_1747727449384",
+      "type": "conversation",
+      "metadata": {
+        "position": {
+          "x": 767.8648702660118,
+          "y": 255.32882742294368
+        }
+      },
+      "prompt": "The interview has been generated and thank the user for the call.",
+      "voice": {
+        "provider": "deepgram",
+        "voiceId": "thalia",
+        "model": "aura-2"
+      }
+    },
+    {
+      "name": "hangup_1747727590982",
+      "type": "hangup",
+      "metadata": {
+        "position": {
+          "x": 862.0288877497521,
+          "y": 471.9503371574734
+        }
+      }
+    },
+    {
+      "name": "node_1747834912788",
+      "type": "apiRequest",
+      "metadata": {
+        "position": {
+          "x": 767.5668283957388,
+          "y": -18.80243489395523
+        }
+      },
+      "method": "POST",
+      "url": `${process.env.NEXT_PUBLIC_BASE_URL}/api/vapi/generate`,
+      "headers": {
+        "type": "object",
+        "properties": {}
+      },
+      "body": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "description": "",
+            "value": "{{role}}"
+          },
+          "type": {
+            "type": "string",
+            "description": "",
+            "value": "{{ type }}"
+          },
+          "level": {
+            "type": "string",
+            "description": "",
+            "value": "{{ level }}"
+          },
+          "techstack ": {
+            "type": "string",
+            "description": "",
+            "value": "{{ techstack }}"
+          },
+          "amount": {
+            "type": "string",
+            "description": "",
+            "value": "{{ amount}}"
+          },
+          "userid": {
+            "type": "string",
+            "description": "",
+            "value": "{{ userid }}"
+          }
+        }
+      },
+      "output": {
+        "type": "object",
+        "properties": {}
+      },
+      "mode": "blocking",
+      "hooks": []
+    },
+    {
+      "name": "node_1747844870295",
+      "type": "conversation",
+      "metadata": {
+        "position": {
+          "x": 767.9999999999998,
+          "y": -231.99999999999994
+        }
+      },
+      "prompt": "Say that the Interview will be generated shortly."
+    }
+  ],
+  "edges": [
+    {
+      "from": "conversation_1747727449384",
+      "to": "hangup_1747727590982",
+      "condition": {
+        "type": "ai",
+        "prompt": ""
+      }
+    },
+    {
+      "from": "node_1747834912788",
+      "to": "conversation_1747727449384",
+      "condition": {
+        "type": "ai",
+        "prompt": ""
+      }
+    },
+    {
+      "from": "node_1747844870295",
+      "to": "node_1747834912788",
+      "condition": {
+        "type": "ai",
+        "prompt": ""
+      }
+    },
+    {
+      "from": "start",
+      "to": "node_1747844870295",
+      "condition": {
+        "type": "ai",
+        "prompt": "If user provided all the required variables."
+      }
+    }
+  ]
+}
